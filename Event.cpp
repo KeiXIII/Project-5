@@ -17,6 +17,7 @@ struct NodeType{
     int year;
     int hour;
     int minutes;
+    string AmPm;
 };
 
 Event::Event(){
@@ -25,11 +26,12 @@ Event::Event(){
         table[i]->next = NULL;
         table[i]->newTitle = "NULL";
         table[i]->descrip = "NULL";
-        table[i]->month = NULL;
-        table[i]->day = NULL;
-        table[i]->year = NULL;
-        table[i]->hour = NULL;
-        table[i]->minutes = NULL;
+        table[i]->month = 0;
+        table[i]->day = 0;
+        table[i]->year = 0;
+        table[i]->hour = 0;
+        table[i]->minutes = 0;
+        table[i]->AmPm = "NULL";
     }
 }
 
@@ -45,7 +47,6 @@ Event::~Event(){
 		delete temp;
 	}
     }
-    delete table[];
 }
 
 /*int Event::hashKey(int month){
@@ -55,8 +56,8 @@ Event::~Event(){
 
 void Event::addEvent(string title, string descript, 
                      int month, int day, int year, 
-                     int hour, int minutes){
-    int index = month;
+                     int hour, int minutes, string dayNight){
+    int index = month-1;
     if(table[index]->newTitle == "NULL"){
         table[index]->newTitle = title;
         table[index]->descrip = descript;
@@ -65,6 +66,8 @@ void Event::addEvent(string title, string descript,
         table[index]->year = year;
         table[index]->hour = hour;
         table[index]->minutes = minutes;
+        table[index]->AmPm = dayNight;
+        
     }else{
         head = table[index];
         NodeType* temp = new NodeType;
@@ -75,6 +78,7 @@ void Event::addEvent(string title, string descript,
         temp->year = year;
         temp->hour = hour;
         temp->minutes = minutes;
+        temp->AmPm = dayNight;
         temp->next = NULL;
         while(head->next != NULL){
             head = head->next;
@@ -84,85 +88,67 @@ void Event::addEvent(string title, string descript,
 }
 
 void Event::removeEvent(string title, int month){
-    int index = month;
-    head = table[index];
-    NodeType* temp;
-    if(table[index]->newTitle == title){
-        temp = head;
-        head = head->next;
-        delete temp;
-    }else{
-        while(head->next != NULL && head->newTitle != title){
-            temp = head;
-            head = head->next;
+    if(eventExists(title, month) != false){ 
+        int index = month-1;
+        head = table[index];
+        NodeType* temp;
+        if(table[index]->newTitle == title){
+            table[index] = head->next;
+            delete head;
+        }else{
+            while(head->next != NULL && head->newTitle != title){
+                temp = head;
+                head = head->next;
+            }
+            temp->next = head->next;
+            delete head;
         }
-        temp->next = head->next;
-        delete head;
     }
 }
 
-bool 
-
-void Event::printEventMonth(int month){
-    
+bool Event::eventExists(string title, int month){
+    int index = month-1;
+    head = table[index];
+    NodeType* temp;
+    if(table[index]->newTitle == title){
+        return true;
+    }else{
+        while(head->next != NULL){
+            if(head->next->newTitle == title)
+                return true;
+            else
+                head = head->next;
+        }
+    }
+    return false;
 }
 
-/*void Event::editTitle(string string title){
-    
-}
-
-void Event::editDescript(string de){
-    
-}
-
-void Event::editDate(string mon, int day, int year, int hr, int min){
-    
-}*/
-
-Event::Event(string newTitle, int day, MONTH month, int year, int hour, int minutes, string descript) {
-	title = newTitle;
-	date.tm_mday = day;
-	date.tm_mon = month;
-	date.tm_year = year;
-	date.tm_hour = hour;
-	date.tm_min = minutes;
-	description = descript;
-}
-
-void Event::displayEvent(ofstream &fout) {
-	fout << title << endl;
-	fout << description << endl;
-	fout << date.tm_hour << endl;
-	fout << date.tm_min << endl;
-	fout << MONTH(date.tm_mon) << endl;
-	fout << date.tm_mday << endl;
-	fout << date.tm_year << endl;
-}
-
-void Event::editTitle(string newTitle) {
-	title = newTitle;
-}
-
-void Event::editDate(int day, MONTH month, int year, int hour, int minutes) {
-	date.tm_mday = day;
-	date.tm_mon = month;
-	date.tm_year = year;
-	date.tm_hour = hour;
-	date.tm_min = minutes;
-}
-
-void Event::editDescript(string descript) {
-	description = descript;
-}
-
-string Event::getTitle() {
-	return title;
-}
-
-string Event::getDescription() {
-	return description;
-}
-
-tm Event::getDate() {
-	return date;
+void Event::printMonth(int month){
+    int index = month-1;
+    head = table[index];
+    if(table[index] == NULL)
+        cout << "No events were added for " << months[month -1] << endl << endl;
+    else{
+        if(head->next == NULL){
+            cout << "Title: " << head->newTitle << endl;
+            cout << "Description: " << head->descrip << endl;
+            cout << "Date: " << months[head->month-1] << " " << head->day << ", "<< head->year << endl;
+            if(head->minutes == 0)
+                cout << "Time: " << head->hour << ":" << "00 " << head->AmPm << endl << endl;
+            else
+                cout << "Time: " << head->hour << ":" << head->minutes << " " << head->AmPm << endl << endl;
+            head = head->next;
+        }else{
+            while(head != NULL){
+                cout << "Title: " << head->newTitle << endl;
+                cout << "Description: " << head->descrip << endl;
+                cout << "Date: " << months[head->month-1] << " " << head->day << ", "<< head->year << endl;
+                if(head->minutes == 0)
+                    cout << "Time: " << head->hour << ":" << "00 " << head->AmPm << endl << endl;
+                else
+                    cout << "Time: " << head->hour << ":" << head->minutes << " " << head->AmPm << endl << endl;
+                head = head->next;
+            }
+        }
+    }
 }
