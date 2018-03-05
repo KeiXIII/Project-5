@@ -20,6 +20,7 @@ using namespace std;
 
 //enum MONTH {January, February, March, April, May, June, July, August, September, October, November, December};
 const int SIZE = 12;
+struct NodeType;
 
 class Event{
     
@@ -36,23 +37,9 @@ public:
         int hashKey(string title);
         void addEvent(string title, string descript, 
                      int month, int day, int year, 
-                     int hour, int minutes);
+                     int hour, int minutes, string dayNight);
         void removeEvent(string title, int month);
-        void printEventMonth(int month);
-        /*void editTitle(string title);
-        void editDescript(string de);
-        void editDate(string mon, int day, int year, int hr, int min);*/
-	/*Event(string title, int day, MONTH month, int year, int hour, int minutes, string descript);
-
-	void displayEvent();
-	void displayEvent(ofstream &fout);
-	void editTitle(string newTitle);
-	void editDate(int day, MONTH month, int year, int hour, int minutes);
-	void editDescript(string descript);
-	string getTitle();
-	string getDescription();
-	tm getDate();*/
+        bool eventExists(string title, int month);
+        void printMonth(int month);
 	
 };
-
-
