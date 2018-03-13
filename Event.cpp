@@ -86,7 +86,51 @@ void Event::addEvent(string title, string descript,
         head->next = temp;   
     }      
 }
-
+//found an easier solution to just reprint with the same values plus a change in other values.
+void Event::editEvent(string title, string descript,
+                      int month, int day, int year,
+                      int hour, int minutes, string dayNight)
+{
+    if(eventExists(title, month) != false){
+        int index = month-1;
+        head = table[index];
+        NodeType* temp;
+        if(table[index]->newTitle == title){
+            table[index] = head->next;
+            delete head;
+            int index = month-1;
+            if(table[index]->newTitle == "NULL"){
+                table[index]->newTitle = title;
+                table[index]->descrip = descript;
+                table[index]->month = month;
+                table[index]->day = day;
+                table[index]->year = year;
+                table[index]->hour = hour;
+                table[index]->minutes = minutes;
+                table[index]->AmPm = dayNight;
+                
+            }else{
+                head = table[index];
+                NodeType* temp = new NodeType;
+                temp->newTitle = title;
+                temp->descrip = descript;
+                temp->month = month;
+                temp->day = day;
+                temp->year = year;
+                temp->hour = hour;
+                temp->minutes = minutes;
+                temp->AmPm = dayNight;
+                temp->next = NULL;
+                while(head->next != NULL){
+                    head = head->next;
+                }
+                head->next = temp;   
+            }
+        }else{
+            cout << "No Event Found!" << endl;
+        }
+    }
+}
 void Event::removeEvent(string title, int month){
     if(eventExists(title, month) != false){ 
         int index = month-1;

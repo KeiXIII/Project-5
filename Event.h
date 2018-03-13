@@ -38,6 +38,9 @@ public:
         void addEvent(string title, string descript, 
                      int month, int day, int year, 
                      int hour, int minutes, string dayNight);
+    void editEvent(string title, string descript,
+                   int month, int day, int year,
+                   int hour, int minutes, string dayNight);
         void removeEvent(string title, int month);
         bool eventExists(string title, int month);
         void printMonth(int month);
