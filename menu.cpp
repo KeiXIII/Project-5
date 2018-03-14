@@ -1,151 +1,108 @@
-#include "menu.h"
-void Menu::start() {
+
+#include "Menu.h"
+
+using namespace std;
+void Menu::start(){
+	Event eve;
 	int choice;
 
-	cout << "\nMENU\n1. Create New Event\n2. Edit Saved Event\n3. Delete Saved Event\n4. Quit\n";
+	cout << "\n\tMENU\n1. Create new event\n2. Edit event\n3. Delete event\n4. Show event\n5. Quit\n";
 	cin >> choice;
 
-	if (choice == 1) {
-		string title, description, dayNight;
-		int hour, minute, month, day, year;
+	do
+	{
+		if (choice == 1)
+		{
+			cout << "\tCREATING EVENT\n";
+			cin.ignore();
+			cout << "Enter event title:  ";
+			string title;
+			getline(cin, title);
 
-		cin.ignore();
+			cout << "Decription: ";
+			string des;
+			getline(cin, des);
 
-		cout << "CREATING NEW EVENT..." << endl;
+			cout << "Month: ";
+			int mon;
+			cin >> mon;
 
-		cout << "Enter title: ";
-		getline(cin, title);
-		cout << "\nEnter description: ";
-		getline(cin, description);
-		cout << "\nEnter hour: ";
-		cin >> hour;
-		cout << "\nEnter minute: ";
-		cin >> minute;
-		cout << "\nEnter am/pm: ";
-		getline(cin, dayNight);
-		cout << "\nEnter month: ";
-		cin >> month;
-		cout << "\nEnter day: ";
-		cin >> day;
-		cout << "\nEnter year: ";
-		cin >> year;
+			cout << "day: ";
+			int day;
+			cin >> day;
 
-		Event newEvent;
-		newEvent.addEvent(title, description,
-			month, day, year,
-			hour, minute, dayNight);
+			cout << "year: ";
+			int yr;
+			cin >> yr;
 
+			cout << "hour: ";
+			int hr;
+			cin >> hr;
 
-
-		//return 1;
-	}
-	/*else if (choice == 2) {
-		string title4edit;
-		Event event4edit;
-		int choice2;
-
-		cin.ignore();
-
-		cout << "\nWhat is title of event to edit?\n";
-		getline(cin, title4edit);
-
-		event4edit = container.find(title4edit)->second;
-
-		cout << "EVENT FOUND!" << endl;
-		event4edit.displayEvent();
-
-		//cin.ignore();
-
-		cout << "1. Edit Title\n2. Edit Description\n3. Edit Date\n";
-		cin >> choice2;
-
-		if (choice2 == 1) {
-			string newTitle;
-
-			cout << "\nNew Title: ";
-			getline(cin, newTitle);
-
-			event4edit.editTitle(newTitle);
+			cout << "minute: ";
+			int min;
+			cin >> min;
 
 			cin.ignore();
 
-			event4edit.displayEvent();
+			cout << "Am/Pm: ";
+			string ampm;
+			getline(cin, ampm);
 
-			ofstream fout;
+			eve.addEvent(title, des, mon, day, yr, hr, min, ampm);
 
-			fout.open("savedEvents.txt");
+			cout << "\n\tMENU\n1. Create new event\n2. Edit event\n3. Delete event\n4. Show event\n5. Quit\n";
 
-			for (mmap::iterator it = container.begin(); it != container.end(); ++it)
-				(*it).second.displayEvent(fout);
+			cin >> choice;
 		}
-		else if (choice2 == 2) {
-			string newDescript;
-
-			cout << "\nNew Description: ";
-			getline(cin, newDescript);
-
-			event4edit.editDescript(newDescript);
-
+		else if (choice == 2)
+		{
 			cin.ignore();
-
-			ofstream fout;
-
-			fout.open("savedEvents.txt");
-
-			for (mmap::iterator it = container.begin(); it != container.end(); ++it)
-				(*it).second.displayEvent(fout);
+			cout << "Title: ";
+			string title;
+			getline(cin, title);
+			cout << "Month: ";
+			int mon;
+			cin >> mon;
+		}
+		
+		else if (choice == 3)
+		{
+			cout << "\tDELETING EVENT\n";
 			cin.ignore();
-		}
-		else {
-			int newHour, newMinute, newMonth, newDay, newYear;
+			cout << "Title: ";
+			string title;
+			getline(cin, title);
+			cout << "Month: ";
+			int mon;
+			cin >> mon;
 
-			cout << "\nEnter hour: ";
-			cin >> newHour;
-			cout << "\nEnter minute: ";
-			cin >> newMinute;
-			cout << "\nEnter month: ";
-			cin >> newMonth;
-			cout << "\nEnter day: ";
-			cin >> newDay;
-			cout << "\nEnter year: ";
-			cin >> newYear;
+			if (eve.eventExists(title, mon) == false)
+			{
+				cout << "Event not found!" << endl;
+			}
+			else
+			{
+				cout << "Event " << title << "is deleted" << endl;
+				eve.removeEvent(title, mon);
+			}
+			cout << "\n\tMENU\n1. Create new event\n2. Edit event\n3. Delete event\n4. Show event\n5. Quit\n";
 
-			event4edit.editDate(newDay, MONTH(newMonth), newYear, newHour, newMinute);
-
-			ofstream fout;
-
-			fout.open("savedEvents.txt");
-
-			for (mmap::iterator it = container.begin(); it != container.end(); ++it)
-				(*it).second.displayEvent(fout);
+			cin >> choice;
 		}
 
-		cout << "\nEVENT EDITED AND SAVED" << endl;
+		else if (choice == 4)
+		{
+			cout << "SHOWING EVENT OF MONTH" << endl;
+			cout << "Month: ";
+			int mon;
+			cin >> mon;
+			eve.printMonth(mon);
+			cout << "\n\tMENU\n1. Create new event\n2. Edit event\n3. Delete event\n4. Show event\n5. Quit\n";
 
-		//return 2;
-	}*/
-	else if (choice == 3) {
-		string title;
-		int month;
-		Event reEvent;
+			cin >> choice;
 
-		cout << "\nWhat is title of event to delete?" << endl;
-		cin >> title;
-		cout << "in what month?" << endl;
-		cin >> month;
+		}
+	} while (choice != 5);
 
-		reEvent.removeEvent(title, month);
-
-	
-	}
-	/*else {
-		ofstream fout;
-
-		fout.open("savedEvents.txt");
-
-		for (mmap::iterator it = container.begin(); it != container.end(); ++it)
-			(*it).second.displayEvent(fout);
-
-		//return 4;
-	}*/
 }
